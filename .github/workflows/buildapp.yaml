@@ -1,4 +1,4 @@
-name: "Buildpp"
+name: "Build"
 
 on:
   push:
