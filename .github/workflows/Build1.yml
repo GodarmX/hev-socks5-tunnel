@@ -1,7 +1,8 @@
+
 name: "Build1”
 
 on: 
-push: 
+ push: 
 branches: 
 - main 
 pull_request: 
