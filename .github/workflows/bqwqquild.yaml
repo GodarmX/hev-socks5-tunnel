@@ -118,33 +118,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  macos:
-    name: macOS
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        include:
-          - name: arm64
-            flags: -arch arm64 -mmacosx-version-min=11.0
-          - name: x86_64
-            flags: -arch x86_64 -mmacosx-version-min=10.7
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          submodules: true
-      - name: Build ${{ matrix.name }}
-        run: |
-          make CC=clang CFLAGS="${{ matrix.flags }}" LFLAGS="${{ matrix.flags }}" -j $(sysctl -n hw.logicalcpu)
-          cp bin/hev-socks5-tunnel hev-socks5-tunnel-darwin-${{ matrix.name }}
-      - name: Upload ${{ matrix.name }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: hev-socks5-tunnel-darwin-${{ matrix.name }}
-          path: hev-socks5-tunnel-darwin-${{ matrix.name }}
-          if-no-files-found: error
-          retention-days: 1
+  
 
   freebsd:
     name: FreeBSD
@@ -321,37 +295,6 @@ jobs:
           for i in release/hev-*; do
             gh release upload ${{ github.event.release.tag_name }} $i
           done
-
-  apple:
-    name: Apple
-    runs-on: macos-latest
-    if: github.event_name != 'release'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          submodules: true
-      - name: Build
-        run: |
-          ./build-apple.sh
-
-  llvm:
-    name: LLVM
-    runs-on: ubuntu-latest
-    if: github.event_name != 'release'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          submodules: true
-      - name: Prepare
-        run: |
-          sudo apt install -y clang
-      - name: Build
-        run: |
-          make CC=clang ENABLE_STATIC=1 -j`nproc`
 
   docker:
     name: Build Docker Image
