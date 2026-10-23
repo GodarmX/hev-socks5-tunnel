@@ -4,11 +4,11 @@ name: "Build1”
 on: 
  push: 
 branches: 
-- main 
+ - main 
 pull_request: 
 release: 
 types: 
-- published 
+ - published 
 workflow_dispatch:
 
 jobs: 
@@ -24,7 +24,7 @@ with:
 fetch-depth: 1 
 submodules: true 
 - name: Gen Source 
-run: | 
+run:|
 REV_ID=$(git rev-parse --short HEAD) 
 mkdir -p hev-socks5-tunnel-${{ env.BRANCH_NAME }} 
 git ls-files --recurse-submodules | tar c -O -T- | tar x -C hev-socks5-tunnel-${{ env.BRANCH_NAME }} 
